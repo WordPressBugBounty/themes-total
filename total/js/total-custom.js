@@ -91,6 +91,7 @@ jQuery(function ($) {
         delay: 500, // one second delay on mouseout
         animation: {opacity: 'show', height: 'show'}, // fade-in and slide-down animation
         speed: 'fast', // faster animation speed
+        autoArrows: false
     });
 
     $(window).resize(function () {
@@ -126,12 +127,14 @@ jQuery(function ($) {
         return false;
     });
 
-    setTimeout(function () {
-        $.stellar({
-            horizontalScrolling: false,
-            responsive: true,
-        });
-    }, 3000);
+    if ($('[data-stellar-background-ratio]').length) {
+        setTimeout(function () {
+            $.stellar({
+                horizontalScrolling: false,
+                responsive: true,
+            });
+        }, 3000);
+    }
 
     $('.ht-team-counter-wrap').waypoint(function () {
         setTimeout(function () {
