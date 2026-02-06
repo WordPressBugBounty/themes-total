@@ -4,9 +4,9 @@ Total is distributed under the terms of the GNU GPL v2 or later.
 
 Contributors: hashthemes
 Requires at least: 6.3
-Tested up to: 6.8
-Stable tag: 2.1.94
-Requires PHP: 7.4
+Tested up to: 6.9
+Stable tag: 2.2.0
+Requires PHP: 7.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -19,6 +19,24 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 
 == Changelog ==
+= 2.2.0 - Jan 12, 2026 =
+* Christmas Discount removed from welcome page
+
+= 2.1.99 - Dec 22, 2025 =
+* Christmas Discount added on welcome page
+
+= 2.1.98 - Dec 7, 2025 =
+* Black Friday Deal - Removed
+
+= 2.1.97 - Nov 20, 2025 =
+* Black Friday Deal - Added
+
+= 2.1.96 - Nov 10, 2025 =
+* Dimiss Nux not working - Fixed
+
+= 2.1.95 - Oct 12, 2025 =
+* Starter Content added
+
 = 2.1.94 - Aug 19, 2025 =
 * Typos fixed in welcome page and customizer
 
