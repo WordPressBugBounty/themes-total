@@ -4,8 +4,8 @@ Total is distributed under the terms of the GNU GPL v2 or later.
 
 Contributors: hashthemes
 Requires at least: 6.3
-Tested up to: 6.9
-Stable tag: 2.2.2
+Tested up to: 7.0
+Stable tag: 2.2.3
 Requires PHP: 7.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -19,11 +19,15 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 
 == Changelog ==
+= 2.2.3 - Jul 06, 2026 =
+* Compatibility test with WordPress v 7.0
+* Design fixes
+
 = 2.2.2 - Apr 1, 2026 =
 * Security bug fixes (Cross-site Scripting)
 
 = 2.2.1 - Mar 19, 2026 =
-*  Minor typo fixes
+*  Minor typo fixess
 
 = 2.2.0 - Jan 12, 2026 =
 * Christmas Discount removed from welcome page
