@@ -118,8 +118,15 @@ function total_order_sections() {
 
     check_ajax_referer('total-order-sections', 'secure');
 
-    if (isset($_POST['sections'])) {
-        set_theme_mod('total_frontpage_sections', $_POST['sections']);
+    if (isset($_POST['sections']) && is_array($_POST['sections'])) {
+        // Only accept known section keys. The saved value is used to build a
+        // template path in total_front_page_loop(), so it must never be free form.
+        $allowed = array_merge(total_home_section_defaults(), array('total_client_logo_section'));
+        $sections = array_values(array_intersect(array_map('sanitize_key', wp_unslash($_POST['sections'])), $allowed));
+
+        if (!empty($sections)) {
+            set_theme_mod('total_frontpage_sections', $sections);
+        }
     }
     wp_die();
 }
@@ -155,6 +162,46 @@ if (!function_exists('total_is_upgrade_notice_active')) {
     function total_is_upgrade_notice_active() {
         $show_upgrade_notice = apply_filters('total_hide_upgrade_notice', get_theme_mod('total_hide_upgrade_notice', false));
         return !$show_upgrade_notice;
+    }
+
+}
+
+if (!function_exists('total_section_slots_full')) {
+
+    /*
+     *  Whether every block slot of a fixed size home page section is in use.
+     *
+     *  The free version gives each of these sections a set number of blocks.
+     *  Somebody who has filled all of them has already met the limit, which is
+     *  a different situation from somebody who has just opened the panel, and
+     *  the upgrade notice reads better if it says so.
+     *
+     *  @param string $prefix Setting name without the trailing index.
+     *  @param int    $slots  How many blocks the free version allows.
+     *  @return bool
+     */
+
+    function total_section_slots_full($prefix, $slots) {
+        for ($i = 1; $i <= $slots; $i++) {
+            if (!get_theme_mod($prefix . $i)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+}
+
+if (!function_exists('total_section_upgrade_label')) {
+
+    /*
+     *  The upgrade headline for a fixed size section: the "you have run out"
+     *  wording once every slot is used, the general pitch before that.
+     */
+
+    function total_section_upgrade_label($prefix, $slots, $full_label, $default_label) {
+        return total_section_slots_full($prefix, $slots) ? $full_label : $default_label;
     }
 
 }
