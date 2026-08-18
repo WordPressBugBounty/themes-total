@@ -79,8 +79,22 @@
 .free-pro-demos a.button .dashicons {
     height: auto;
     width: auto;
-    line-height: 42px;
+    line-height: 42px !important;
     margin-right: 8px;
+    color: #FFF !important;
+    vertical-align: inherit !important;
+}
+
+/* Seasonal sale banner on the welcome screen. Rendered only while a campaign
+   window is open - see total_get_active_campaign(). */
+.welcome-sale-banner {
+    display: block;
+    margin-bottom: 40px;
+}
+
+.welcome-sale-banner img {
+    width: 100%;
+    display: block;
 }
 
 .welcome-promo-banner {
@@ -268,7 +282,7 @@
     position: relative;
     font-size: 14px;
     font-weight: 600;
-    line-height: 26px;
+    line-height: 36px;
     padding: 10px 15px;
     border-top: 1px solid #EEE;
     overflow: hidden;
@@ -282,8 +296,8 @@
     top: 0;
     bottom: 0;
     right: 0;
-    height: 46px;
-    padding: 10px 20px;
+    height: 56px;
+    padding: 8px;
     background: rgba(244, 244, 244, .7);
     border-left: 1px solid rgba(0, 0, 0, .05);
 }
@@ -362,6 +376,17 @@ table.comparison-table th {
 table.comparison-table th p:last-child,
 table.comparison-table td p:last-child {
     margin-bottom: 0;
+}
+
+/* Feature rows are numbered here rather than in the PHP, so a row can be
+   inserted without renumbering - and retranslating - every row below it. */
+table.comparison-table {
+    counter-reset: comparison-feature;
+}
+
+table.comparison-table tr.feature-row > td:first-child > span::before {
+    counter-increment: comparison-feature;
+    content: counter(comparison-feature) ") ";
 }
 
 table.comparison-table td span {
@@ -491,10 +516,6 @@ a.buy-pro-btn:hover {
     margin: 0px 5px 0 0;
     height: auto;
     font-size: 18px;
-}
-
-#adminmenu .toplevel_page_total-welcome div.wp-menu-image.svg {
-    background-size: 18px auto;
 }
 
 /** Footer Review **/
@@ -672,24 +693,3 @@ body.toplevel_page_total-welcome #wpfooter a {
         margin-bottom: 0;
     }
 }
-
-#toplevel_page_total-welcome .wp-menu-name{
-    position: relative;
-}
-/*
-#toplevel_page_total-welcome .wp-menu-name:after{
-    content: "40%\AOFF";
-    white-space: pre;
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    background: #FF0000;
-    color: #FFF;
-    font-size: 10px;
-    line-height: 1;
-    padding: 5px;
-    border-radius: 20px;
-    text-align: center;
-}
-*/

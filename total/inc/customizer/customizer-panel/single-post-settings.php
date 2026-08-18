@@ -37,5 +37,45 @@ $wp_customize->add_control(new Total_Upgrade_Info_Control($wp_customize, 'total_
     ),
     'active_callback' => 'total_is_upgrade_notice_active',
     'upgrade_text' => esc_html__('Upgrade to Pro', 'total'),
-    'upgrade_url' => 'https://hashthemes.com/wordpress-theme/total/?utm_source=wordpress&utm_medium=total-single-post&utm_campaign=total-upgrade'
+    'upgrade_url' => total_upgrade_url('single-post', 'total-customizer')
+)));
+
+/*
+ *  The four blog layouts the notice above refers to, shown rather than counted.
+ *  These are Pro's Blog Layout choices, which cover the blog and archive pages.
+ */
+$wp_customize->add_setting('total_blog_layout_preview', array(
+    'sanitize_callback' => 'total_sanitize_text'
+));
+
+$wp_customize->add_control(new Total_Pro_Preview_Control($wp_customize, 'total_blog_layout_preview', array(
+    'section' => 'total_blog_options_section',
+    'priority' => 101,
+    'label' => esc_html__('4 blog layouts in Total Pro', 'total'),
+    'columns' => 2,
+    'images' => array(
+        'blog-layout1.png',
+        'blog-layout2.png',
+        'blog-layout3.png',
+        'blog-layout4.png'
+    ),
+    'upgrade_text' => esc_html__('Unlock these layouts', 'total'),
+    'upgrade_url' => total_upgrade_url('preview-blog-layout', 'total-customizer'),
+    'active_callback' => 'total_is_upgrade_notice_active'
+)));
+
+/*
+ *  Blog and archive settings.
+ *
+ *  Pro combines blog and single post into one section; free covers only the
+ *  single post, so the archive half has no home at all. This sits directly
+ *  before Single Post Settings, where its Pro counterpart begins.
+ */
+$wp_customize->add_section(new Total_Upgrade_Section($wp_customize, 'total-blog-archive-upgrade-section', array(
+    'title' => esc_html__('Blog & Archive Settings', 'total'),
+    'priority' => 44,
+    'class' => 'ht--single-row ht--pro-row',
+    'upgrade_text' => esc_html__('Get Pro', 'total'),
+    'upgrade_url' => total_upgrade_url('sec-blog-archive', 'total-customizer'),
+    'active_callback' => 'total_is_upgrade_notice_active'
 )));

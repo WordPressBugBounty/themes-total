@@ -83,6 +83,18 @@
     margin-right: 8px;
 }
 
+/* Seasonal sale banner on the welcome screen. Rendered only while a campaign
+   window is open - see total_get_active_campaign(). */
+.welcome-sale-banner {
+    display: block;
+    margin-bottom: 40px;
+}
+
+.welcome-sale-banner img {
+    width: 100%;
+    display: block;
+}
+
 .welcome-promo-banner {
     width: 25%;
     background: #fff;
@@ -364,6 +376,20 @@ table.comparison-table td p:last-child {
     margin-bottom: 0;
 }
 
+/* Feature rows are numbered here rather than in the PHP, so a row can be
+   inserted without renumbering - and retranslating - every row below it.
+   The counter is isolated as its own LTR run so "1)" is not mirrored. */
+table.comparison-table {
+    counter-reset: comparison-feature;
+}
+
+table.comparison-table tr.feature-row > td:first-child > span::before {
+    counter-increment: comparison-feature;
+    content: counter(comparison-feature) ") ";
+    display: inline-block;
+    direction: ltr;
+}
+
 table.comparison-table td span {
     font-weight: bold;
 }
@@ -491,10 +517,6 @@ a.buy-pro-btn:hover {
     margin: 0px 5px 0 0;
     height: auto;
     font-size: 18px;
-}
-
-#adminmenu .toplevel_page_total-welcome div.wp-menu-image.svg {
-    background-size: 18px auto;
 }
 
 /** Footer Review **/
