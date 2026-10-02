@@ -33,6 +33,13 @@ if (get_theme_mod('total_blog_section_disable') != 'on') {
                     'posts_per_page' => absint($total_blog_post_count),
                     'category__not_in' => $total_blog_cat_exclude
                 );
+
+                // Starter content posts are auto-drafts until the Customizer changeset is published; preview them with the published posts.
+                $total_blog_draft_ids = total_customize_draft_post_ids('post');
+                if ($total_blog_draft_ids) {
+                    $args['post__in'] = array_merge($total_blog_draft_ids, get_posts(array_merge($args, array('fields' => 'ids'))));
+                    $args['post_status'] = array('publish', 'auto-draft');
+                }
                 $query = new WP_Query($args);
                 if ($query->have_posts()):
                     while ($query->have_posts()):
@@ -45,7 +52,7 @@ if (get_theme_mod('total_blog_section_disable') != 'on') {
                                 if (isset($total_image[0])) {
                                     ?>
                                     <div class="ht-blog-thumbnail">
-                                        <a href="<?php the_permalink(); ?>"><img src="<?php echo esc_url($total_image[0]) ?>" alt="<?php echo esc_attr(get_the_title()); ?>"></a>
+                                        <a href="<?php the_permalink(); ?>"><img src="<?php echo esc_url($total_image[0]) ?>" alt="<?php echo esc_attr(get_the_title()); ?>"<?php echo total_image_loading_attrs(); ?>></a>
                                     </div>
                                     <?php
                                 }

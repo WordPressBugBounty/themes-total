@@ -8,7 +8,9 @@ if (!function_exists('total_excerpt')) {
 
     function total_excerpt($content, $letter_count) {
         $new_content = strip_shortcodes($content);
-        $new_content = wp_strip_all_tags($new_content);
+        // Keep a space where one paragraph, heading or line ends and the next begins.
+        $new_content = preg_replace('#</(p|div|h[1-6]|li|blockquote)>|<br\s*/?>#i', '$0 ', $new_content);
+        $new_content = trim(preg_replace('/\s+/', ' ', wp_strip_all_tags($new_content)));
         $content = mb_substr($new_content, 0, $letter_count);
 
         if (($letter_count !== 0) && (strlen($new_content) > $letter_count)) {
@@ -384,6 +386,109 @@ if (!function_exists('total_meta_dimension_css')) {
 
 }
 
+if (!function_exists('total_setup_section_post')) {
+
+    // Makes a post the current post for a home section; pair with wp_reset_postdata().
+    // get_post() rather than WP_Query, so posts held only in the object cache (starter content in the WordPress.org theme preview) are found too.
+    // Visibility follows WP_Query's single post rules, so users who can edit still see drafts, and the Customizer shows unpublished (auto-draft) starter content.
+    function total_setup_section_post($post_id) {
+        $section_post = $post_id ? get_post(absint($post_id)) : null;
+        $status = $section_post ? get_post_status_object(get_post_status($section_post)) : null;
+
+        if (!$status) {
+            return false;
+        } elseif ($status->public) {
+            $visible = true;
+        } elseif (!is_user_logged_in()) {
+            $visible = false;
+        } elseif ($status->protected) {
+            $visible = current_user_can('edit_post', $section_post->ID);
+        } elseif ($status->private) {
+            $visible = current_user_can('read_post', $section_post->ID);
+        } else {
+            $visible = false;
+        }
+
+        if (!$visible) {
+            return false;
+        }
+
+        $GLOBALS['post'] = $section_post;
+        setup_postdata($section_post);
+        return true;
+    }
+
+}
+
+if (!function_exists('total_section_repeater_items')) {
+
+    /*
+     * The items a home section shows when it is set to take its content from its repeater
+     * rather than from pages, or false when it uses pages.
+     *
+     * The page/repeater switch and the repeater itself are added to the Customizer by the
+     * HashThemes Demo Importer plugin. They use Total Plus's setting ids and item format, so
+     * the content carries over to Total Plus, and it keeps showing if the plugin is removed.
+     */
+    function total_section_repeater_items($section) {
+        $sections = array(
+            'slider' => array('total_slider_block_type', 'total_sliders'),
+            'featured' => array('total_featured_block_type', 'total_featured'),
+            'service' => array('total_service_block_type', 'total_service'),
+            'team' => array('total_team_block_type', 'total_team'),
+            'testimonial' => array('total_testimonial_block_type', 'total_testimonial'),
+        );
+
+        if (!isset($sections[$section]) || 'repeater' != get_theme_mod($sections[$section][0], 'page')) {
+            return false;
+        }
+
+        $items = json_decode(get_theme_mod($sections[$section][1], ''), true);
+        $enabled = array();
+
+        foreach (is_array($items) ? $items : array() as $item) {
+            if (is_array($item) && (!isset($item['enable']) || 'yes' == $item['enable'])) {
+                $enabled[] = $item;
+            }
+        }
+
+        return $enabled;
+    }
+
+}
+
+if (!function_exists('total_repeater_image_url')) {
+
+    // A repeater image, stored as a URL, at a registered image size when it is in the media library.
+    function total_repeater_image_url($url, $size = 'full') {
+        $attachment_id = $url ? attachment_url_to_postid($url) : 0;
+        $image = $attachment_id ? wp_get_attachment_image_src($attachment_id, $size) : false;
+        return isset($image[0]) ? $image[0] : $url;
+    }
+
+}
+
+if (!function_exists('total_customize_draft_post_ids')) {
+
+    // In the Customizer preview, the posts that this changeset's starter content created and that are still auto-drafts until it is published.
+    function total_customize_draft_post_ids($post_type = 'post') {
+        global $wp_customize;
+
+        if (!is_customize_preview() || !$wp_customize instanceof WP_Customize_Manager || !$wp_customize->get_setting('nav_menus_created_posts')) {
+            return array();
+        }
+
+        $post_ids = array();
+        foreach ((array) $wp_customize->get_setting('nav_menus_created_posts')->value() as $post_id) {
+            if ($post_type == get_post_type($post_id) && 'auto-draft' == get_post_status($post_id)) {
+                $post_ids[] = absint($post_id);
+            }
+        }
+        return $post_ids;
+    }
+
+}
+
 if (!function_exists('total_home_section_defaults')) {
 
     function total_home_section_defaults() {
@@ -478,6 +583,27 @@ if (!function_exists('total_is_woocommerce_activated')) {
         } else {
             return false;
         }
+    }
+
+}
+
+if (!function_exists('total_image_loading_attrs')) {
+
+    /*
+     * Loading hints for a theme image. 'slider': the first slide jumps the queue, the others load normally,
+     * as slides fade in place. 'lead': the first loads normally. Everything else loads lazily unless switched off.
+     */
+    function total_image_loading_attrs($role = '') {
+        static $first = array();
+        $is_first = $role && !isset($first[$role]);
+        $first[$role] = true;
+        if ('slider' === $role) {
+            return $is_first ? ' fetchpriority="high"' : '';
+        }
+        if ('lead' === $role && $is_first) {
+            return '';
+        }
+        return get_theme_mod('total_lazy_load_images', true) ? ' loading="lazy" decoding="async"' : '';
     }
 
 }

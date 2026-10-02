@@ -123,7 +123,7 @@ if (!class_exists('Total_Welcome')):
                 <?php $this->dismiss_button('welcome'); ?>
                 <div class="total-welcome-notice-wrap">
                     <h2><?php esc_html_e('Congratulations!', 'total'); ?></h2>
-                    <p><?php printf(esc_html__('%1$s is now installed and ready to use. You can start either by importing the ready made demo or get started by customizing it your self.', 'total'), $this->theme_name); ?></p>
+                    <p><?php /* translators: %1$s: theme name */ printf(esc_html__('%1$s is now installed and ready to use. You can start either by importing the ready made demo or get started by customizing it your self.', 'total'), $this->theme_name); ?></p>
 
                     <div class="total-welcome-info">
                         <div class="total-welcome-thumb">
@@ -144,7 +144,7 @@ if (!class_exists('Total_Welcome')):
 
                         <div class="total-welcome-getting-started">
                             <h3><?php esc_html_e('Get Started', 'total'); ?></h3>
-                            <p><?php printf(esc_html__('Here you will find all the necessary links and information on how to use %s.', 'total'), $this->theme_name); ?></p>
+                            <p><?php /* translators: %s: theme name */ printf(esc_html__('Here you will find all the necessary links and information on how to use %s.', 'total'), $this->theme_name); ?></p>
                             <p><a href="<?php echo esc_url(total_settings_page_url()); ?>" class="button button-primary"><?php esc_html_e('Go to Setting Page', 'total'); ?></a></p>
                         </div>
                     </div>
@@ -166,6 +166,7 @@ if (!class_exists('Total_Welcome')):
                 return;
             }
 
+            /* translators: %s: theme name */
             $hook = add_menu_page(esc_html__('Welcome', 'total'), sprintf(esc_html__('%s Settings', 'total'), esc_html(str_replace(' ', '', $this->theme_name))), 'manage_options', 'total-welcome', array($this, 'welcome_screen'), 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MC4zNiA4MC4zNiI+PGRlZnM+PHN0eWxlPi5jbHMtMXtmaWxsOiNmZmY7fTwvc3R5bGU+PC9kZWZzPjx0aXRsZT5zc0Fzc2V0IDRAMzJ4PC90aXRsZT48ZyBpZD0iTGF5ZXJfMiIgZGF0YS1uYW1lPSJMYXllciAyIj48ZyBpZD0iTGF5ZXJfMS0yIiBkYXRhLW5hbWU9IkxheWVyIDEiPjxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTczLDgwLjM2QTcuMzMsNy4zMywwLDAsMCw4MC4zNiw3M1Y3LjMzQTcuMzMsNy4zMywwLDAsMCw3MywwSDcuMzNBNy4zMyw3LjMzLDAsMCwwLDAsNy4zM1Y3M2E3LjMzLDcuMzMsMCwwLDAsNy4zMyw3LjMzWk01OC4yNiw0LjE0bDcsMy4yM0wyMi4xMywyNy4xMWwtNy0zLjIzWm0tOS4zNSwxOS0uNDYuN1Y3Mi45NGwtNy4zOSwzLjM1VjI4bC0xLjE2LS42OS0xNyw3Ljc0VjI4LjQ5TDY2LjM0LDguNjR2Ni41OFpNMjEuMzIsMzUuMDhsLTcuMzktMy4yNFYyNS4yNmw3LjM5LDMuMzVaTTMyLjA1LDcyLjk0VjMyLjY1bDcuMzktMy4zNXY0N1oiLz48L2c+PC9nPjwvc3ZnPg==', 60);
 
             /*
@@ -331,6 +332,7 @@ if (!class_exists('Total_Welcome')):
             $screen = get_current_screen();
 
             if ('toplevel_page_total-welcome' == $screen->id) {
+                /* translators: %s: five-star link */
                 $text = sprintf(esc_html__('Please leave us a %s rating if you like our theme . A huge thank you from HashThemes in advance!', 'total'), '<a href="https://wordpress.org/support/theme/total/reviews/?filter=5#new-post" target="_blank">&#9733;&#9733;&#9733;&#9733;&#9733;</a>');
             }
 
@@ -354,6 +356,43 @@ if (!class_exists('Total_Welcome')):
                 $import_button_text = esc_html__('Install Demo Importer Plugin', 'total');
             }
             return '<a data-slug="' . esc_attr($slug) . '" data-filename="' . esc_attr($filename) . '" class="' . esc_attr($import_class) . '" href="' . $import_url . '">' . esc_html($import_button_text) . '</a>';
+        }
+
+        // The first things to set up, each marked done from the site's own settings.
+        public function setup_steps() {
+            $demo_active = $this->check_plugin_active_state('hashthemes-demo-importer', 'hashthemes-demo-importer');
+            return array(
+                array(
+                    'title' => esc_html__('Show the home page sections', 'total'),
+                    'text' => esc_html__('Turn on "Enable Home Sections", then fill in each section under Home Sections.', 'total'),
+                    'done' => get_theme_mod('total_enable_frontpage', false) || ('page' === get_option('show_on_front') && 'templates/home-template.php' === get_page_template_slug(get_option('page_on_front'))),
+                    'url' => admin_url('customize.php?autofocus[section]=static_front_page'),
+                ),
+                array(
+                    'title' => esc_html__('Add your logo', 'total'),
+                    'text' => esc_html__('Upload a logo, or keep the site title as text.', 'total'),
+                    'done' => has_custom_logo(),
+                    'url' => admin_url('customize.php?autofocus[control]=custom_logo'),
+                ),
+                array(
+                    'title' => esc_html__('Set up the main menu', 'total'),
+                    'text' => esc_html__('Create a menu and assign it to the Primary Menu location.', 'total'),
+                    'done' => has_nav_menu('primary'),
+                    'url' => admin_url('customize.php?autofocus[panel]=nav_menus'),
+                ),
+                array(
+                    'title' => esc_html__('Choose your colors', 'total'),
+                    'text' => esc_html__('Set the theme color used for buttons, links and highlights.', 'total'),
+                    'done' => false !== get_theme_mod('total_template_color', false),
+                    'url' => admin_url('customize.php?autofocus[section]=colors'),
+                ),
+                array(
+                    'title' => esc_html__('Import a demo (optional)', 'total'),
+                    'text' => esc_html__('Start from a ready-made website instead of an empty one.', 'total'),
+                    'done' => (bool) get_option('hdi_last_imported_demo'),
+                    'url' => $demo_active ? admin_url('themes.php?page=hdi-demo-importer') : '',
+                ),
+            );
         }
 
         public function erase_hide_notice() {

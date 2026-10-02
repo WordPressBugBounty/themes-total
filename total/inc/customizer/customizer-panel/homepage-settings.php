@@ -3,21 +3,26 @@
 /* ============PRO FEATURES============ */
 
 $total_pro_features = '<ul>
+	<li>' . esc_html__("AI Site Builder - describe your business and get a complete website, built with the home page sections or with Elementor", "total") . '</li>
+	<li>' . esc_html__("Write with AI for the home page sections and blocks, and AI agents that edit the home page sections through a draft", "total") . '</li>
 	<li>' . esc_html__("8 premium demos that can be imported with one click, each in a Customizer and an Elementor build", "total") . '</li>
-    <li>' . esc_html__("Elementor compatible - Built your Home Page with Customizer or Elementor whichever you like", "total") . '</li>
-    <li>' . esc_html__("18 Home Page Customizer sections with lots of variations", "total") . '</li>
-	<li>' . esc_html__("24 Elementor Elements", "total") . '</li>
+    <li>' . esc_html__("Elementor compatible - Build your Home Page with Customizer or Elementor whichever you like", "total") . '</li>
+    <li>' . esc_html__("21 Home Page Customizer sections, including FAQ, Video and Timeline, with lots of variations", "total") . '</li>
+    <li>' . esc_html__("Add only the sections you need, each more than once if you like, and name them", "total") . '</li>
+	<li>' . esc_html__("27 Elementor widgets", "total") . '</li>
+	<li>' . esc_html__("8 Gutenberg blocks - services, team, testimonials, counters, pricing, FAQ, timeline and portfolio", "total") . '</li>
     <li>' . esc_html__("25 custom widgets", "total") . '</li>
 	<li>' . esc_html__("Video, parallax and gradient background options for each section", "total") . '</li>
-	<li>' . esc_html__("5 icon packs for the icon picker (9000+ icons)", "total") . '</li>
+	<li>' . esc_html__("4 icon packs for the icon picker (11,000+ icons)", "total") . '</li>
 	<li>' . esc_html__("Unlimited slider with linkable button", "total") . '</li>
 	<li>' . esc_html__("Add unlimited blocks(like slider, team, testimonial) for each Section", "total") . '</li>
 	<li>' . esc_html__("Fully customizable options for Home Page blocks", "total") . '</li>
 	<li>' . esc_html__("Animated section backgrounds - birds, fog, waves, particles, net and dots", "total") . '</li>
 	<li>' . esc_html__("Remove footer credit Text", "total") . '</li>
 	<li>' . esc_html__("6 header layouts and advanced header settings", "total") . '</li>
-	<li>' . esc_html__("4 blog layouts", "total") . '</li>
+	<li>' . esc_html__("5 blog layouts, including a card grid", "total") . '</li>
 	<li>' . esc_html__("In-built MegaMenu", "total") . '</li>
+	<li>' . esc_html__("Off-canvas panel opened from a header icon, with its own widget area", "total") . '</li>
 	<li>' . esc_html__("Advanced Typography options", "total") . '</li>
 	<li>' . esc_html__("Advanced color options", "total") . '</li>
 	<li>' . esc_html__("Top header bar", "total") . '</li>
@@ -27,6 +32,7 @@ $total_pro_features = '<ul>
 	<li>' . esc_html__("Advanced footer setting", "total") . '</li>
 	<li>' . esc_html__("Front page sections with full window height", "total") . '</li>
 	<li>' . esc_html__("Blog single page - Author Box, Social Share and Related Post", "total") . '</li>
+	<li>' . esc_html__("Reading progress bar on single posts", "total") . '</li>
 	<li>' . esc_html__("Google map option", "total") . '</li>
 	<li>' . esc_html__("Unlimited social links, each with its own icon from the icon picker", "total") . '</li>
 	<li>' . esc_html__("GDPR compliance and cookie consent bar", "total") . '</li>
@@ -35,7 +41,7 @@ $total_pro_features = '<ul>
 	<li>' . esc_html__("Fully Multilingual and Translation ready", "total") . '</li>
 	<li>' . esc_html__("Fully RTL(Right to left) languages compatible", "total") . '</li>
 	</ul>
-	<a class="ht-implink button button-primary" href="' . esc_url(total_settings_page_url('free_vs_pro')) . '">' . esc_html__("Comparison - Free Vs Pro", "total") . '</a>';
+	<a class="ht-implink button button-primary" target="_blank" href="' . esc_url(total_settings_page_url('free_vs_pro')) . '">' . esc_html__("Comparison - Free Vs Pro", "total") . '</a>';
 
 // Seasonal campaigns swap the banner copy automatically - see total_get_active_campaign().
 $total_campaign = total_get_active_campaign();
